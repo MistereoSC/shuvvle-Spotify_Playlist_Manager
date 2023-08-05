@@ -1,16 +1,16 @@
-import {ServerError} from '../../utils/Server/ServerResponses'
+import {SpotifyError} from '@/utils/SpotifyAPI/internal/_responses'
 import {requestAccessTokenServer} from '@/utils/SpotifyAPI/SpotifyAuth'
 
 const runtimeConfig = useRuntimeConfig()
 
 export default defineEventHandler(async (event) => {
 	if (event.node.req.method !== 'POST') {
-		return new ServerError(404)
+		return new SpotifyError(404)
 	}
 
 	const body: {token: string} = await readBody(event)
 	if (!body || !body.token) {
-		return new ServerError(400, 'Bad request - No access token provided')
+		return new SpotifyError(400, 'Bad request - No access token provided')
 	}
 
 	const redirect_uri = runtimeConfig.public.REDIRECT_URI

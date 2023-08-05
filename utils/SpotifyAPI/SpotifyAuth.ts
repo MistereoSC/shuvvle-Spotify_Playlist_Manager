@@ -1,4 +1,4 @@
-import {ServerResponse, ServerError} from '@/utils/Server/ServerResponses'
+import {SpotifyError, SpotifyResponse} from './internal/_responses'
 
 export function requestUserAuthorizationRedirect(settings: {
 	client_id: string
@@ -35,10 +35,10 @@ export async function requestAccessTokenServer(settings: {
 			}
 		})
 		.then(function (data: IAccessToken) {
-			return new ServerResponse(data)
+			return new SpotifyResponse(data)
 		})
 		.catch(function (error: {message: string; status: number}) {
-			return new ServerError(error.status, error.message)
+			return new SpotifyError(error.status, error.message)
 		})
 
 	return response

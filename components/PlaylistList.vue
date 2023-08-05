@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ISpotifyPlaylist} from 'utils/SpotifyAPI/SpotifyPlaylists'
+import {ISpotifyPlaylist} from 'utils/SpotifyAPI/SpotifyInterfaces'
 
 const emit = defineEmits<{
 	(e: 'select', value: Array<ISpotifyPlaylist>): void
@@ -84,15 +84,7 @@ function togglePlaylist(item: ISpotifyPlaylist) {
 	gap: 1rem;
 	padding: 0.5rem;
 }
-.header {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
 
-	&__subtitle {
-		color: $text-mute;
-	}
-}
 .item {
 	cursor: pointer;
 	display: grid;
@@ -217,4 +209,3 @@ function togglePlaylist(item: ISpotifyPlaylist) {
 	}
 }
 </style>
-utils/SpotifyAPI/internal/SpotifyPlaylists

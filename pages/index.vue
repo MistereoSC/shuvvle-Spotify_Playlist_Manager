@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import {useSpotifyStore} from '@/utils/stores/spotifyStore'
 import {
-	ISpotifyPlaylists,
+	ISpotifyUserPlaylists,
 	ISpotifyPlaylist,
-} from '@/utils/SpotifyAPI/SpotifyPlaylists'
+} from '@/utils/SpotifyAPI/SpotifyInterfaces'
 
 const store = useSpotifyStore()
 let Spotify = store.getSpotify()
-const playlists: Ref<ISpotifyPlaylists | null> = ref(null)
+const playlists: Ref<ISpotifyUserPlaylists | null> = ref(null)
 onMounted(async () => {
 	// TODO: Redirect if no token is present
 	const access_token = localStorage.getItem('access_token')
@@ -20,7 +20,7 @@ onMounted(async () => {
 async function fetchPlaylists() {
 	if (!Spotify) return null
 	// TODO: Error Handling
-	const response = await Spotify.Playlists.userPlaylists({limit: 50})
+	const response = await Spotify.Playlists.byCurrentUser({limit: 50})
 		.then((res) => {
 			if (!res.ok) {
 				console.error(
@@ -57,7 +57,16 @@ function updateSelection(arr: Array<ISpotifyPlaylist>) {
 			<div class="view__grid__center">
 				<div class="view__grid__center__left">
 					<div class="view__grid__center__left__header">
-						<h2 class="view__grid__center__left__header__title">Playlists</h2>
+						<div class="view__grid__center__left__header__title">
+							<span
+								class="view__grid__center__left__header__title__icon material-symbols-outlined"
+							>
+								queue_music
+							</span>
+							<span lass="view__grid__center__left__header__title__text"
+								>Playlists</span
+							>
+						</div>
 						<span class="view__grid__center__left__header__subtitle"
 							>Select up to 3</span
 						>
@@ -75,10 +84,7 @@ function updateSelection(arr: Array<ISpotifyPlaylist>) {
 				<div class="view__grid__center__right"></div>
 			</div>
 			<div class="view__grid__bottom">
-				<button @click="() => Spotify?.Playback.resume()">Play</button>
-				<button @click="() => Spotify?.Playback.pause()">Pause</button>
-				<button @click="() => Spotify?.Playback.next()">Next</button>
-				<button @click="() => Spotify?.Playback.previous()">Previous</button>
+				<Playback />
 			</div>
 		</div>
 	</div>
@@ -138,11 +144,24 @@ $content-max-height: calc(100vh - $header-height - $footer-height);
 				background-color: $background-1;
 				border-radius: 0 10px 10px 0;
 				&__header {
-					display: inline;
-					z-index: 10;
+					padding: 0.5rem 1rem 0.5rem 1rem;
+					&__title {
+						display: flex;
+						align-items: center;
+						gap: 6px;
+						font-size: 1.5rem;
+
+						&__icon {
+							color: $text-disabled;
+						}
+					}
+					&__subtitle {
+						color: $text-mute;
+					}
+					box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.5);
 				}
 				&__content {
-					height: calc(100% - 54px);
+					height: calc(100% - 76px);
 					overflow-y: scroll;
 				}
 			}
@@ -155,6 +174,8 @@ $content-max-height: calc(100vh - $header-height - $footer-height);
 			}
 			&__middle {
 				height: 100%;
+				max-height: $content-max-height;
+
 				width: 100%;
 				background-color: $background-1;
 				border-radius: 10px;
@@ -163,4 +184,3 @@ $content-max-height: calc(100vh - $header-height - $footer-height);
 	}
 }
 </style>
-utils/SpotifyAPI/internal/SpotifyPlaylists

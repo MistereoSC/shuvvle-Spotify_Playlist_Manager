@@ -1,4 +1,4 @@
-export class ServerError implements IResponse {
+export class SpotifyError implements IRes {
 	ok = false
 	status = 500
 	message = ''
@@ -29,7 +29,7 @@ export class ServerError implements IResponse {
 	}
 }
 
-export class ServerResponse<Type> implements IResponse {
+export class SpotifyResponse<Type> implements IRes {
 	ok = true
 	status = 200
 	message = 'ok'
@@ -44,7 +44,7 @@ export class ServerResponse<Type> implements IResponse {
 	}
 }
 
-export interface IResponse {
+interface IRes {
 	ok: boolean
 	status: number
 	body: any
